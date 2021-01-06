@@ -1,1 +1,57 @@
-<p>falcone works!</p>
+<div class="grid-container">
+    <div class="grid-item">
+        <select [(ngModel)]="formModel.planet1">
+            <option value="">--select--</option>
+            <option *ngFor="let plt of planets">{{plt.name}}</option>
+        </select>
+        <div *ngIf="formModel.planet1">
+            <div *ngFor="let vhl of vehicles">
+                <input [value]='vhl.name' type="radio" name="vhl1" [(ngModel)]="formModel.vehicle1" (change)="onvalueChange('first',formModel.vehicle1)">
+                {{vhl.name}} ({{vhl.total_no}})
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid-item">
+        <select [(ngModel)]="formModel.planet2">
+            <option value="">--select--</option>
+            <option *ngFor="let plt of planets">{{plt.name}}</option>
+        </select>
+        <div *ngIf="formModel.planet2">
+            <div *ngFor="let vhl of vehicles">
+                <input [value]='vhl.name' type="radio" name="vhl2" [(ngModel)]="formModel.vehicle2" (change)="onvalueChange('second',formModel.vehicle2)">
+                {{vhl.name}} ({{vhl.total_no}})
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid-item">
+        <select [(ngModel)]="formModel.planet3">
+            <option value="">--select--</option>
+            <option *ngFor="let plt of planets">{{plt.name}}</option>
+        </select>
+        <div *ngIf="formModel.planet3">
+            <div *ngFor="let vhl of vehicles" >
+                <input [value]='vhl.name' type="radio" name="vhl3" [(ngModel)]="formModel.vehicle3" (change)="onvalueChange('third',formModel.vehicle3)">
+                {{vhl.name}} ({{vhl.total_no}})
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid-item">
+        <select [(ngModel)]="formModel.planet4">
+            <option value="">--select--</option>
+            <option *ngFor="let plt of planets">{{plt.name}}</option>
+        </select>
+        <div *ngIf="formModel.planet4">
+            <div *ngFor="let vhl of vehicles">
+                <input [value]='vhl.name' type="radio" name="vhl4" [(ngModel)]="formModel.vehicle4" (change)="onvalueChange('fourth',formModel.vehicle4)">
+                {{vhl.name}} ({{vhl.total_no}})
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    Time Taken : {{totalTimeTaken}}
+</div>
