@@ -1,12 +1,20 @@
 <div class="grid-container">
     <div class="grid-item">
-        <select [(ngModel)]="formModel.planet1">
+        <select [(ngModel)]="formModel.planet1" (change)="onPlanetChange('1')">
             <option value="">--select--</option>
             <option *ngFor="let plt of planets">{{plt.name}}</option>
         </select>
         <div *ngIf="formModel.planet1">
-            <div *ngFor="let vhl of vehicles">
-                <input [value]='vhl.name' type="radio" name="vhl1" [(ngModel)]="formModel.vehicle1" (change)="onvalueChange('first',formModel.vehicle1)">
+            <div *ngFor="let vhl of vehicles;let i = index">
+                <input 
+                    [value]='vhl.name' 
+                    type="radio" 
+                    name="vhl_1_{{vhl.name}}_{{i}}" 
+                    id="vhl_1_{{vhl.name}}_{{i}}" 
+                    [(ngModel)]="formModel.vehicle1"
+                    [disabled]="isTravelNotPossible(vhl, formModel.planet1)"
+                    (change)="onvalueChange($event,'first',formModel.vehicle1)" 
+                    #vhl_1_{{vhl.name}}_{{i}}="ngModel">
                 {{vhl.name}} ({{vhl.total_no}})
             </div>
         </div>
@@ -18,8 +26,16 @@
             <option *ngFor="let plt of planets">{{plt.name}}</option>
         </select>
         <div *ngIf="formModel.planet2">
-            <div *ngFor="let vhl of vehicles">
-                <input [value]='vhl.name' type="radio" name="vhl2" [(ngModel)]="formModel.vehicle2" (change)="onvalueChange('second',formModel.vehicle2)">
+            <div *ngFor="let vhl of vehicles;let i = index">
+                <input 
+                    [value]='vhl.name' 
+                    type="radio" 
+                    name="vhl_2_{{vhl.name}}_{{i}}"  
+                    id="vhl_2_{{vhl.name}}_{{i}}" 
+                    [(ngModel)]="formModel.vehicle2"
+                    [disabled]="isTravelNotPossible(vhl, formModel.planet2)"
+                    (change)="onvalueChange($event,'second',formModel.vehicle2)" 
+                    #vhl_2_{{vhl.name}}_{{i}}="ngModel">
                 {{vhl.name}} ({{vhl.total_no}})
             </div>
         </div>
@@ -31,8 +47,16 @@
             <option *ngFor="let plt of planets">{{plt.name}}</option>
         </select>
         <div *ngIf="formModel.planet3">
-            <div *ngFor="let vhl of vehicles" >
-                <input [value]='vhl.name' type="radio" name="vhl3" [(ngModel)]="formModel.vehicle3" (change)="onvalueChange('third',formModel.vehicle3)">
+            <div *ngFor="let vhl of vehicles;let i = index" >
+                <input 
+                    [value]='vhl.name' 
+                    type="radio" 
+                    name="vhl_3_{{vhl.name}}_{{i}}"  
+                    id="vhl_3_{{vhl.name}}_{{i}}"
+                    [disabled]="isTravelNotPossible(vhl, formModel.planet3)"
+                    [(ngModel)]="formModel.vehicle3" 
+                    (change)="onvalueChange($event,'third',formModel.vehicle3)" 
+                    #vhl_3_{{vhl.name}}_{{i}}="ngModel">
                 {{vhl.name}} ({{vhl.total_no}})
             </div>
         </div>
@@ -44,8 +68,17 @@
             <option *ngFor="let plt of planets">{{plt.name}}</option>
         </select>
         <div *ngIf="formModel.planet4">
-            <div *ngFor="let vhl of vehicles">
-                <input [value]='vhl.name' type="radio" name="vhl4" [(ngModel)]="formModel.vehicle4" (change)="onvalueChange('fourth',formModel.vehicle4)">
+            <div *ngFor="let vhl of vehicles;let i = index">
+                <input 
+                    [value]='vhl.name' 
+                    type="radio" 
+                    name="vhl_4_{{vhl.name}}_{{i}}"  
+                    id="vhl_4_{{vhl.name}}_{{i}}" 
+                    [(ngModel)]="formModel.vehicle4"
+                    [disabled]="isTravelNotPossible(vhl, formModel.planet4)"
+                    (change)="onvalueChange($event,'fourth',formModel.vehicle4)" 
+                    #vhl_4_{{vhl.name}}_{{i}}="ngModel"
+                >
                 {{vhl.name}} ({{vhl.total_no}})
             </div>
         </div>
@@ -53,5 +86,20 @@
 </div>
 
 <div>
-    Time Taken : {{totalTimeTaken}}
+    Time Taken : {{getTotalTime()}}
 </div>
+<button [disabled]="!(formModel.planet4 && formModel.planet3 && formModel.planet2 && formModel.planet1)" (click)="findThatFalcone()">Find Falcone</button>
+<table>
+    <tr>
+        <th>Vehicle Name</th>
+        <th>Total Count</th>
+        <th>Used Count</th>
+        <th>Avaialbility</th>
+    </tr>
+    <tr *ngFor="let vehicle of vehicles">
+        <td>{{vehicle.name}}</td>
+        <td>{{vehicle.total_no}}</td>
+        <td>{{usedVehicleCount[vehicle.name] || 0}}</td>
+        <td>{{vehicle.total_no - (usedVehicleCount[vehicle.name] || 0) ? 'Available': 'Not Available'}}</td>
+    </tr>
+</table>

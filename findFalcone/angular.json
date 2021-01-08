@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "findFalcone"
+  "defaultProject": "findFalcone",
+  "cli": {
+    "analytics": "01c710d9-8d4d-4262-b316-a3538afe1da9"
+  }
 }

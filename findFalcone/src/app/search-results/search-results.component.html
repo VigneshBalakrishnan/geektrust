@@ -1,0 +1,12 @@
+<div *ngIf="searchResults.status">
+  <div *ngIf="searchResults.status === 'false'">
+    Was not able to find Falcone
+  </div>
+  <div *ngIf="searchResults.status === 'success'">
+    Success. Congratulations on finding Falcone. King Shan is mighty please.<br/>
+    Planet Found: {{searchResults.planet_name}}<br/>
+    Time Taken: {{searchResults.time_taken}}
+  </div>
+</div>
+
+<button routerLink=''>Start Again</button>

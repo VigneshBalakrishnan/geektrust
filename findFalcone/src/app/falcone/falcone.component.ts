@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { FalconeService } from './falcone-service.service';
 
 @Component({
@@ -12,8 +13,20 @@ export class FalconeComponent implements OnInit {
   planets: any;
   vehicles: any;
   totalTimeTaken: any = 0;
-
-  constructor(private falconeService: FalconeService) { }
+  timeTakenArray: any = [];
+  totalVehicleCounts:any = {};
+  get usedVehicleCount() {
+    let vehicles:any = {};
+    ['planet1', 'planet2', 'planet3', 'planet4'].forEach((planet, index)=>{
+      if(this.formModel[planet] && this.formModel['vehicle'+(index+1)]) {
+        vehicles[this.formModel['vehicle'+(index+1)]] ? (vehicles[this.formModel['vehicle'+(index+1)]] += 1) : (vehicles[this.formModel['vehicle'+(index+1)]] = 1);
+      } else {
+        vehicles[this.formModel['vehicle'+(index+1)]]  = 0;
+      }
+    })
+    return vehicles;
+  }
+  constructor(private falconeService: FalconeService, private router: Router) { }
 
   ngOnInit(): void {
     this.getDropDownValues();
@@ -24,25 +37,48 @@ export class FalconeComponent implements OnInit {
              this.falconeService.getvehicles()).subscribe(([planets, vehicles]: any) => {
                this.planets = planets;
                this.vehicles = vehicles;
+               vehicles.forEach((vehicle: any)=>{
+                this.totalVehicleCounts[vehicle.name] = vehicle.total_no;
+               })
              });
   }
 
-  onvalueChange(level: any, value: any): any{
-    switch (level){
-      case 'first':
-        console.log(value);
-        const 
-        break;
-      case 'second':
-        console.log(value);
-        break;
-      case 'third':
-        console.log(value);
-        break;
-      case 'fourth':
-        console.log(value);
-        break;
-    }
+  onvalueChange(event:any,level: any, value: any): any{
+  this.getTotalTime();
   }
 
+  calculateTimeTaken(vehicle:any,planet:any){
+    const speed = this.vehicles.find((data:any)=>data.name === vehicle).speed;
+    const timeTaken = this.planets.find((data:any)=>data.name === planet).distance / speed;
+    return timeTaken;
+  }
+
+  getTotalTime() {
+    return ['planet1', 'planet2', 'planet3', 'planet4'].reduce((calculatedDistance, planetName, index)=>{
+      return calculatedDistance + (this.formModel[planetName] && this.formModel['vehicle'+index] ? this.calculateTimeTaken(this.formModel['vehicle'+index], this.formModel[planetName]) : 0);
+    }, 0);
+  }
+
+  isTravelNotPossible(vehicle:any, planet:any){
+    return (this.usedVehicleCount[vehicle.name] >= this.totalVehicleCounts[vehicle.name]) || vehicle.max_distance < this.planets.find((k:any)=>k.name===planet).distance;
+  }
+
+  onPlanetChange(index:any){
+   delete this.formModel['vehicle'+index];
+  }
+  findThatFalcone(){
+    this.falconeService.getToken().subscribe((response:any)=>{
+      const payload = { 
+        token: response.token, 
+        planet_names: ['planet1', 'planet2', 'planet3', 'planet4'].map(planet=>this.formModel[planet]),
+        vehicle_names: ['vehicle1', 'vehicle2', 'vehicle3', 'vehicle4'].map(vehicle=>this.formModel[vehicle])
+      }
+      this.falconeService.findFalcone(payload).subscribe((result:any)=>{
+        this.falconeService.searchResults.next({...result, time_taken: this.getTotalTime()});
+        if(result.status){
+          this.router.navigate(['results'])
+        }
+      })
+    })
+  }
 }
