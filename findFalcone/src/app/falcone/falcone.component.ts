@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { FalconeService } from './falcone-service.service';
 
 @Component({
@@ -10,11 +11,11 @@ import { FalconeService } from './falcone-service.service';
 })
 export class FalconeComponent implements OnInit {
   formModel: any = {};
-  planets: any;
-  vehicles: any;
-  totalTimeTaken: any = 0;
-  timeTakenArray: any = [];
+  planets: any = [];
+  vehicles: any = [];
+  totalTimeTaken: number = 0;
   totalVehicleCounts:any = {};
+  displayedColumns: string[] = ['Vehicle Name', 'Total Count', 'Used Count', 'Avaialbility'];
   get usedVehicleCount() {
     let vehicles:any = {};
     ['planet1', 'planet2', 'planet3', 'planet4'].forEach((planet, index)=>{
@@ -45,6 +46,7 @@ export class FalconeComponent implements OnInit {
 
   onvalueChange(event:any,level: any, value: any): any{
   this.getTotalTime();
+  
   }
 
   calculateTimeTaken(vehicle:any,planet:any){

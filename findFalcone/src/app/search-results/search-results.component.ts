@@ -10,7 +10,6 @@ export class SearchResultsComponent {
     searchResults:any = {};
     constructor(private falconeService: FalconeService){
         this.falconeService.searchResults.subscribe((result)=>{
-            console.log(result);
             this.searchResults = result
         });
     }

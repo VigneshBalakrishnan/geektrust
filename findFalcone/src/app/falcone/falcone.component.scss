@@ -1,10 +1,47 @@
 .grid-container {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto;
     padding: 10px;
   }
   .grid-item {
     padding: 20px;
     font-size: 13px;
-    text-align: center;
+    text-align: justify;
   }
+.tableclass{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 15%;
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-radio-button {
+  margin: 5px;
+  align-items: center;
+}
+
+.timetakentofin{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.findFalcone{
+  width: fit-content;
+}
+
+.mat-cell {
+  padding: 1rem;
+  text-align: start;
+}
+
+.mat-header-cell{
+  padding: 1rem;
+}
